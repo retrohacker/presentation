@@ -1,0 +1,24 @@
+producer:
+  build: ./producer
+  volumes:
+    - ./producer/producer:/usr/src/app:ro
+  ports:
+    - 3000:3000
+  links:
+    - rabbitmq
+consumer:
+  build: ./consumer
+  volumes:
+    - ./consumer/consumer:/usr/src/app:ro
+  links:
+    - rabbitmq
+nginx:
+  image: nginx
+  volumes:
+    - ./nginx/producer.conf:/etc/nginx/conf.d/producer.conf:ro
+  ports:
+    - 8080:8080
+  links:
+    - producer
+rabbitmq:
+  image: rabbitmq
