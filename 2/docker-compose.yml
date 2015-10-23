@@ -1,0 +1,4 @@
+producer:
+  build: ./producer
+  ports:
+    - 3000:3000
