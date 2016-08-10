@@ -9,9 +9,7 @@ consumer:
   links:
     - rabbitmq
 nginx:
-  image: nginx
-  volumes:
-    - ./nginx/producer.conf:/etc/nginx/conf.d/producer.conf:ro
+  build: ./nginx
   ports:
     - 8080:8080
   links:
