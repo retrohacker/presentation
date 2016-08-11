@@ -4,12 +4,22 @@ producer:
     - 3000:3000
   links:
     - rabbitmq
+    - registry
+  environment:
+    - NODE_DEBUG=nsolid
+    - NSOLID_APPNAME=producer
+    - NSOLID_HUB=registry:4001
 consumer:
   build: ./consumer
   links:
     - rabbitmq
+    - registry
+  environment:
+    - NODE_DEBUG=nsolid
+    - NSOLID_APPNAME=consumer
+    - NSOLID_HUB=registry:4001
 nginx:
-  image: nginx
+  build: ./nginx
   volumes:
     - ./nginx/producer.conf:/etc/nginx/conf.d/producer.conf:ro
   ports:
@@ -18,3 +28,29 @@ nginx:
     - producer
 rabbitmq:
   image: rabbitmq
+
+#################################################
+# Copy and Pasted from NodeSource Documentation #
+#################################################
+registry:
+  image: nodesource/nsolid-registry
+  container_name: registry
+  ports:
+    - 4001:4001
+proxy:
+  image: nodesource/nsolid-hub
+  environment:
+    - REGISTRY=registry:4001
+    - NODE_DEBUG=nsolid
+  links:
+    - registry
+console:
+  image: nodesource/nsolid-console
+  container_name: console
+  environment:
+    - NODE_DEBUG=nsolid
+  command: --hub proxy:9000
+  ports:
+    - 3001:3000
+  links:
+    - proxy

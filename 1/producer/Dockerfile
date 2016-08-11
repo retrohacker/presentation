@@ -1,4 +1,4 @@
-FROM nodesource/node:4.2
+FROM nodesource/node:4.3
 
 EXPOSE 3000
 

@@ -1,4 +1,4 @@
-FROM nodesource/node:4.2
+FROM nodesource/nsolid
 
 EXPOSE 3000
 
@@ -7,4 +7,4 @@ RUN npm install
 
 ADD producer/ .
 
-CMD ["node","app.js"]
+CMD ["nsolid","app.js"]

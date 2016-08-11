@@ -2,8 +2,7 @@ var express = require('express')
 var app = express()
 var log = require('./produce.js')
 
-var response = "Hello World!"
-
+var response = 'Hello World!'
 
 app.get('/', function (req, res) {
   res.send(response)
