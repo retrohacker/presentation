@@ -51,10 +51,10 @@ items:
             app: producer
         spec:
           containers:
-          - image: gcr.io/nodesource-bacu/producer:latest
-            name: producer
-            ports:
-            - containerPort: 3000
+            - image: gcr.io/core-falcon-135017/producer:latest
+              name: producer
+              ports:
+              - containerPort: 3000
   - apiVersion: extensions/v1beta1
     kind: Deployment
     metadata:
@@ -70,7 +70,7 @@ items:
         spec:
           containers:
             - name: consumer
-              image: gcr.io/nodesource-bacu/consumer:latest
+              image: gcr.io/core-falcon-135017/consumer:latest
   - apiVersion: extensions/v1beta1
     kind: Deployment
     metadata:
@@ -86,7 +86,7 @@ items:
         spec:
           containers:
             - name: nginx
-              image: gcr.io/nodesource-bacu/nginx:latest
+              image: gcr.io/core-falcon-135017/nginx:latest
               ports:
                 - containerPort: 8080
   - apiVersion: extensions/v1beta1

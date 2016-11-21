@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "async": "^2.1.2",
+    "pg": "^6.1.0",
+    "supertest": "^2.0.1",
+    "tape": "^4.6.2"
+  },
+  "scripts": {
+    "test": "tape *.js"
+  }
+}

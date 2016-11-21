@@ -1,4 +1,4 @@
-.SILENT:
+#.SILENT:
 help:
 	echo
 	echo "NodeSource Metrics Server Make commands"
@@ -10,47 +10,62 @@ help:
 	echo "    clean - Remove docker containers"
 	echo "    run - Start this service, and all of its deps, locally (docker)"
 	echo "    deploy - Deploy this app to Google Cloud (kubernetes)"
-	echo "    deploy-nsolid - Setup N|Solid dashboard (kubernetes)"
 	echo "    provision-cluster - Provision a remote kubernetes cluster"
 	echo "    delete-cluster - Remove a remote kubernetes cluster"
+	echo "    dashboard - Start the kubectl dashboard"
+	echo "    test-integration - Run integration tests for this project"
+	echo "    test-all - Run all tests for this project"
 	echo "    deps - Check for all dependencies"
 
 build: clean
-	docker-compose build
-	docker tag 5_consumer gcr.io/nodesource-bacu/consumer:latest
-	docker tag 5_producer gcr.io/nodesource-bacu/producer:latest
-	docker tag 5_nginx gcr.io/nodesource-bacu/nginx:latest
+	docker-compose -f ./run.yml build
+	docker tag 5_consumer gcr.io/core-falcon-135017/consumer:latest
+	docker tag 5_producer gcr.io/core-falcon-135017/producer:latest
+	docker tag 5_nginx gcr.io/core-falcon-135017/nginx:latest
 
 run: build
-	docker-compose up
+	docker-compose -f ./run.yml up
 
 clean:
-	docker-compose rm -f
+	docker-compose -f ./run.yml rm -f
+	docker-compose -f ./test.yml rm -f
 
 clean-deploy: clean
-	gcloud config set project nodesource-bacu
+	gcloud config set project core-falcon-135017
 	gcloud container clusters get-credentials presentation
 	kubectl delete -f kube.yml || true
 
 deploy: clean-deploy build
-	gcloud config set project nodesource-bacu
-	gcloud docker push gcr.io/nodesource-bacu/consumer:latest
-	gcloud docker push gcr.io/nodesource-bacu/producer:latest
-	gcloud docker push gcr.io/nodesource-bacu/nginx:latest
+	gcloud config set project core-falcon-135017
+	gcloud docker push gcr.io/core-falcon-135017/consumer:latest
+	gcloud docker push gcr.io/core-falcon-135017/producer:latest
+	gcloud docker push gcr.io/core-falcon-135017/nginx:latest
 	gcloud container clusters get-credentials presentation
 	kubectl create -f kube.yml
 	kubectl get services
+	echo "Run `kubectl get services` to fetch NGinx's ip address"
 
 provision-cluster:
-	gcloud config set project nodesource-bacu
+	gcloud config set project core-falcon-135017
 	gcloud container clusters create presentation
 
 delete-cluster:
-	gcloud config set project nodesource-bacu
+	gcloud config set project core-falcon-135017
 	gcloud container clusters delete presentation -q
 
-deploy-nsolid:
-	kubectl create -f ./nsolid/nsolid.everything.yml
+dashboard:
+	gcloud config set project core-falcon-135017
+	gcloud container clusters get-credentials presentation
+	echo "Navigate to 127.0.0.1:8001/ui in your browser"
+	kubectl proxy
+
+build-test-integration: build
+	docker-compose -f ./test.yml build
+
+test-integration: clean
+	docker-compose -f ./test.yml up
+
+test-all: test-integration
 
 deps:
 	echo "  Dependencies: "

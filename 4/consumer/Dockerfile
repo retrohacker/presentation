@@ -1,4 +1,4 @@
-FROM nodesource/nsolid
+FROM node:4
 
 EXPOSE 3000
 
@@ -7,4 +7,4 @@ RUN npm install
 
 ADD consumer/ .
 
-CMD ["node","app.js"]
+CMD ["node","index.js"]

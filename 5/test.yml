@@ -1,0 +1,34 @@
+version: "2"
+services:
+  producer:
+    build: ./producer
+    image: retrohacker/presentation:producer
+    links:
+      - rabbitmq
+    ports:
+      - 3000:3000
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/producer.conf:/etc/nginx/conf.d/producer.conf:ro
+    ports:
+      - 8080:8080
+    links:
+      - producer
+  consumer:
+    build: ./consumer
+    links:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq
+  integration:
+    image: retrohacker/presentation:integration-test
+    build: ./test
+    environment:
+      - PRODUCER_HOST=nginx
+      - PRODUCER_PORT=8080
+      - NGINX_HOST=nginx
+      - NGINX_PORT=8080
+    links:
+      - nginx
+      - producer

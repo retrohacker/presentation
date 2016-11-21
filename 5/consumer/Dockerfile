@@ -1,4 +1,4 @@
-FROM nodesource/nsolid
+FROM node:4
 
 EXPOSE 3000
 

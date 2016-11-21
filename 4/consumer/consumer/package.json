@@ -2,6 +2,7 @@
   "dependencies": {
     "amqplib": "^0.4.0",
     "async": "^1.4.2",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "pg": "^6.1.0"
   }
 }

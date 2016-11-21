@@ -9,10 +9,17 @@ app.get('/', function (req, res) {
   log(response)
 })
 
-var server = app.listen(3000, function () {
+/* istanbul ignore next */
+function onListen () {
   var host = server.address().address
   var port = server.address().port
 
   console.log('Example app listening at http://%s:%s', host, port)
-})
+}
 
+/* istanbul ignore next */
+if(module.parent) {
+  module.exports = app
+} else {
+  server = app.listen(3000, onListen)
+}
