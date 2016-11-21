@@ -1,0 +1,7 @@
+version: "2"
+services:
+  producer:
+    build: ./producer
+    image: retrohacker/presentation:producer
+    ports:
+      - 3000:3000

@@ -1,0 +1,3 @@
+./producer/node_modules
+./producer/coverage
+./producer/.nyc_output

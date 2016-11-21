@@ -1,0 +1,14 @@
+version: "2"
+services:
+  producer:
+    extends:
+      file: ./run.yml
+      service: producer
+  integration:
+    image: retrohacker/presentation:integration-test
+    build: ./test
+    environment:
+      - PRODUCER_HOST=producer
+      - PRODUCER_PORT=3000
+    links:
+      - producer

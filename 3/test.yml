@@ -1,0 +1,22 @@
+version: "2"
+services:
+  producer:
+    extends:
+      file: ./run.yml
+      service: producer
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/producer.conf:/etc/nginx/conf.d/producer.conf:ro
+    ports:
+      - 8080:8080
+    links:
+      - producer
+  integration:
+    image: retrohacker/presentation:integration-test
+    build: ./test
+    environment:
+      - PRODUCER_HOST=nginx
+      - PRODUCER_PORT=8080
+    links:
+      - nginx

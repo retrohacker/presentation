@@ -6,15 +6,21 @@ help:
 	echo "  Commands: "
 	echo
 	echo "    help - show this message"
-	echo "    build - Build the Docker images that power local dev (docker)"
 	echo "    run - Start this service, and all of its deps, locally (docker)"
+	echo "    test-producer - Run the unit tests for producer"
 	echo "    deps - Check for all dependencies"
 
 build:
-	cd producer && docker build -t retrohacker/presentation:producer .
+	docker build -t retrohacker/presentation:producer ./producer/
+
+build-test: build
+	docker build -t retrohacker/presentation:producer-test -f ./producer/Test.Dockerfile ./producer/
 
 run: build
 	docker run -it -p 3000:3000 retrohacker/presentation:producer
+
+test-producer: build-test
+	docker run -it -p 3000:3000 retrohacker/presentation:producer-test
 
 deps:
 	echo "  Dependencies: "

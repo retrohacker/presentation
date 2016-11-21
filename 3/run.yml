@@ -1,0 +1,15 @@
+version: "2"
+services:
+  producer:
+    build: ./producer
+    image: retrohacker/presentation:producer
+    ports:
+      - 3000:3000
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/producer.conf:/etc/nginx/conf.d/producer.conf:ro
+    ports:
+      - 8080:8080
+    links:
+      - producer
